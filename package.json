@@ -1,0 +1,25 @@
+{
+  "name": "atlassian-mcp",
+  "version": "0.0.1",
+  "description": "atlassian-mcp MCP server",
+  "type": "module",
+  "bin": {
+    "atlassian-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "mcp-build",
+    "prepare": "npm run build",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "jira.js": "^4.0.6",
+    "mcp-framework": "^0.1.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "^5.3.3"
+  }
+}

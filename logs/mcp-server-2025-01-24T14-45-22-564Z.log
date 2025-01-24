@@ -1,0 +1,18 @@
+[2025-01-24T14:45:22.565Z] [DEBUG] Successfully read package.json from: /home/user/atlassian-mcp/package.json
+[2025-01-24T14:45:22.566Z] [INFO] Using name from package.json: atlassian-mcp
+[2025-01-24T14:45:22.566Z] [DEBUG] Successfully read package.json from: /home/user/atlassian-mcp/package.json
+[2025-01-24T14:45:22.566Z] [INFO] Using version from package.json: 0.0.1
+[2025-01-24T14:45:22.566Z] [INFO] Initializing MCP Server: atlassian-mcp@0.0.1
+[2025-01-24T14:45:22.566Z] [DEBUG] Initialized ToolLoader with directory: /home/user/atlassian-mcp/tools
+[2025-01-24T14:45:22.566Z] [DEBUG] Initialized PromptLoader with directory: /home/user/atlassian-mcp/prompts
+[2025-01-24T14:45:22.566Z] [DEBUG] Initialized ResourceLoader with directory: /home/user/atlassian-mcp/resources
+[2025-01-24T14:45:22.566Z] [DEBUG] Attempting to load tools from: /home/user/atlassian-mcp/tools
+[2025-01-24T14:45:22.567Z] [DEBUG] No tools directory found
+[2025-01-24T14:45:22.567Z] [DEBUG] Attempting to load prompts from: /home/user/atlassian-mcp/prompts
+[2025-01-24T14:45:22.568Z] [DEBUG] No prompts directory found
+[2025-01-24T14:45:22.568Z] [DEBUG] Attempting to load resources from: /home/user/atlassian-mcp/resources
+[2025-01-24T14:45:22.568Z] [DEBUG] No resources directory found
+[2025-01-24T14:45:22.569Z] [DEBUG] No tools directory found
+[2025-01-24T14:45:22.569Z] [DEBUG] No prompts directory found
+[2025-01-24T14:45:22.569Z] [DEBUG] No resources directory found
+[2025-01-24T14:45:22.569Z] [INFO] Started atlassian-mcp@0.0.1
