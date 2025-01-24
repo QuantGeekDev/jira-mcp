@@ -1,46 +1,75 @@
 import { MCPTool } from "mcp-framework";
 import { z } from "zod";
-import jira from "../jira.client";
+import JiraApi from 'jira-client';
 
+const jira = new JiraApi({
+  protocol: 'https',
+  host: 'braindone.atlassian.net',
+  username: 'alex007d@gmail.com',
+  password: 'ATATT3xFfGF0355oN9zSjkcbT2vtgbW8PcaRDzo1lsGx6UBpBTtN3hKiquG22Xyu1gJ0Vwy8t50Y2AmpT51q1vQBaoFP7b0yjMv1CUub8ZV4HFzpS69Gasv66WDt_39Bk8KmXUZy1QIYn2QHvlVM5ztp3-eh6eUEJld81Q0N4AVrX6ItyBXYy6E=7243BFA4',
+  apiVersion: '2',
+  strictSSL: true
+});
 
+const PROJECT_KEY = "MFLP";
+const ISSUE_TYPE = "Task";
 
-async function createTicket(ticketName: string) {
-  try {
-    const projectKey = "MLPF"
-    const summary = "Do some work!!!"
+const CreateTicketSchema = z.object({
+  ticketName: z.string().min(1),
+  description: z.string().optional(),
+  assigneeId: z.string().optional()
+});
 
-    const createdIssue = await jira.issues.createIssue({fields:{issuetype: {id: "1", name: ticketName}, project: {key: projectKey}, summary}})
+type CreateTicketInput = z.infer<typeof CreateTicketSchema>;
 
+const createJiraIssue = async (fields: any) => {
+  const response = await jira.addNewIssue({ fields });
+  if (!response) throw new Error("No issue created");
+  return response;
+};
 
-    if(!createdIssue){
-      throw new Error("No issue created")
-    }
-    console.log(`created issue:`, createdIssue)
+const buildIssueFields = ({ ticketName, description, assigneeId }: CreateTicketInput) => ({
+  project: { key: PROJECT_KEY },
+  summary: ticketName,
+  issuetype: { name: ISSUE_TYPE },
+  description,
+  ...(assigneeId && { assignee: { id: assigneeId } })
+});
 
-    return createdIssue
-  } catch (error) {
-    console.error('Error fetching tickets:', error);
-  }
-}
-interface CreateTicketInput {
-  ticketName: string;
-}
-
-class GetTicketsTool extends MCPTool<CreateTicketInput> {
+class CreateTicketTool extends MCPTool<CreateTicketInput> {
   name = "create_ticket";
   description = "Create a jira ticket";
-
   schema = {
     ticketName: {
-      type: z.string(),
-      description: "Key of Jira project",
+      type: CreateTicketSchema.shape.ticketName,
+      description: "Name/Summary of the ticket"
     },
+    description: {
+      type: CreateTicketSchema.shape.description,
+      description: "Description of the ticket"
+    },
+    assigneeId: {
+      type: CreateTicketSchema.shape.assigneeId,
+      description: "Jira user ID to assign the ticket to"
+    }
   };
 
   async execute(input: CreateTicketInput) {
-    const tickets = createTicket(input.ticketName)
-    return tickets;
+    try {
+      const fields = buildIssueFields(input);
+      const ticket = await createJiraIssue(fields);
+      
+      return {
+        content: [{
+          type: "text",
+          text: `Created ticket: ${ticket.key} - ${ticket.self}`
+        }]
+      };
+    } catch (error) {
+      console.error('Error creating ticket:', error);
+      throw error;
+    }
   }
 }
 
-export default GetTicketsTool;
+export default CreateTicketTool;

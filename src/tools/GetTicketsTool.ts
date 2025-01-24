@@ -1,33 +1,42 @@
 import { MCPTool } from "mcp-framework";
 import { z } from "zod";
-import jira from "../jira.client";
+import JiraApi from 'jira-client';
+
+const jira = new JiraApi({
+  protocol: 'https',
+  host: 'braindone.atlassian.net',
+  username: 'alex007d@gmail.com',
+  password: 'ATATT3xFfGF0355oN9zSjkcbT2vtgbW8PcaRDzo1lsGx6UBpBTtN3hKiquG22Xyu1gJ0Vwy8t50Y2AmpT51q1vQBaoFP7b0yjMv1CUub8ZV4HFzpS69Gasv66WDt_39Bk8KmXUZy1QIYn2QHvlVM5ztp3-eh6eUEJld81Q0N4AVrX6ItyBXYy6E=7243BFA4',
+  apiVersion: '2',
+  strictSSL: true
+});
 
 async function getAllTickets(projectKey: string) {
   try {
-    const response = await jira.issueSearch.searchForIssuesUsingJql({
-      jql: `project = ${projectKey}`,
-      maxResults: 100, 
-      fields: ['summary', 'status', 'assignee'], 
+    const response = await jira.searchJira(`project = ${projectKey}`, {
+      maxResults: 100,
+      fields: ['summary', 'status', 'assignee', 'description']
     });
 
-    if(!response){
-      throw new Error("No response received")
+    if (!response) {
+      throw new Error("No response received");
     }
-    console.log(`Response:`, response)
 
-    return response
+    console.log(`Response:`, response);
+    return response;
   } catch (error) {
     console.error('Error fetching tickets:', error);
+    throw error;
   }
 }
-interface GetTicketsInput {
+
+interface GetAllTicketsInput {
   projectName: string;
 }
 
-class GetTicketsTool extends MCPTool<GetTicketsInput> {
-  name = "get_tickets";
-  description = "Get all jira tickets for a specific project";
-
+class GetAllTicketsTool extends MCPTool<GetAllTicketsInput> {
+  name = "get_all_tickets";
+  description = "Get all jira tickets for a specific project.";
   schema = {
     projectName: {
       type: z.string(),
@@ -35,10 +44,10 @@ class GetTicketsTool extends MCPTool<GetTicketsInput> {
     },
   };
 
-  async execute(input: GetTicketsInput) {
-    const tickets = getAllTickets(input.projectName)
+  async execute(input: GetAllTicketsInput) {
+    const tickets = await getAllTickets(input.projectName);
     return tickets;
   }
 }
 
-export default GetTicketsTool;
+export default GetAllTicketsTool;

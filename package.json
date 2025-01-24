@@ -15,7 +15,8 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "jira.js": "^4.0.6",
+    "@types/jira-client": "^7.1.9",
+    "jira-client": "^8.2.2",
     "mcp-framework": "^0.1.21"
   },
   "devDependencies": {
