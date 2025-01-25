@@ -12,6 +12,20 @@ npm install
 npm run build
 
 ```
+## LOCAL DEV MODE - ROO CLINE CONFIG
+
+Changes args to contain a string with the path to dist/index.js of this repo on your machine. make sure to `npm run build` beforehand
+```
+{
+  "mcpServers": {
+
+    "braindone":
+     {"command": "node",
+      "args":["/home/user/braindone-mcp/dist/index.js"]
+}
+  }
+}
+```
 
 ## Project Structure
 
