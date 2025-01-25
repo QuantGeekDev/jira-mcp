@@ -30,7 +30,7 @@ const buildUpdateFields = ({ summary, description, assigneeId, status }: Omit<Up
 
 class UpdateTicketTool extends MCPTool<UpdateTicketInput> {
   name = "update_ticket";
-  description = "Update an existing Jira ticket";
+  description = "Update an existing Jira ticket. Only pass updated fields as parameters";
   schema = {
     ticketId: {
       type: UpdateTicketSchema.shape.ticketId,
