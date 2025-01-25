@@ -98,7 +98,7 @@ braindone-mcp/
 
 1. Make your changes to the tools
 2. Run `npm run build` to compile
-3. The server will automatically load your tools on startup
+3. Restart the client, or restart the server inside of Roo-Cline's MCP server section
 
 ## Configuration
 
