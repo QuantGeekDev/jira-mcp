@@ -1,5 +1,4 @@
 import { MCPTool } from "mcp-framework";
-import { z } from "zod";
 import jira from '../clients/jira.client.js';
 
 async function getAllProjects() {
