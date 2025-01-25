@@ -8,7 +8,7 @@ async function GetAllUsers(startAt?: string, maxResults?: string) {
     options.startAt = Number.parseInt(startAt)
   }
   if(maxResults){
-    options.maxResuts = Number.parseInt
+    options.maxResults = Number.parseInt(maxResults)
   }
   
   try {
