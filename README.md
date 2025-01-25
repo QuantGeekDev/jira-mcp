@@ -1,4 +1,4 @@
-# atlassian-mcp
+# braindone-mcp
 
 A Model Context Protocol (MCP) server built with mcp-framework.
 

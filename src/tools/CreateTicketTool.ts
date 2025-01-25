@@ -1,15 +1,6 @@
 import { MCPTool } from "mcp-framework";
 import { z } from "zod";
-import JiraApi from 'jira-client';
-
-const jira = new JiraApi({
-  protocol: 'https',
-  host: 'braindone.atlassian.net',
-  username: 'alex007d@gmail.com',
-  password: 'ATATT3xFfGF0355oN9zSjkcbT2vtgbW8PcaRDzo1lsGx6UBpBTtN3hKiquG22Xyu1gJ0Vwy8t50Y2AmpT51q1vQBaoFP7b0yjMv1CUub8ZV4HFzpS69Gasv66WDt_39Bk8KmXUZy1QIYn2QHvlVM5ztp3-eh6eUEJld81Q0N4AVrX6ItyBXYy6E=7243BFA4',
-  apiVersion: '2',
-  strictSSL: true
-});
+import jira from '../clients/jira.client.js';
 
 const PROJECT_KEY = "MFLP";
 const ISSUE_TYPE = "Task";
@@ -50,7 +41,7 @@ class CreateTicketTool extends MCPTool<CreateTicketInput> {
     },
     assigneeId: {
       type: CreateTicketSchema.shape.assigneeId,
-      description: "Jira user ID to assign the ticket to"
+      description: "Jira user ID to assign the ticket to. Do not halucinate this, only assign if it exists"
     }
   };
 
@@ -60,10 +51,10 @@ class CreateTicketTool extends MCPTool<CreateTicketInput> {
       const ticket = await createJiraIssue(fields);
       
       return {
-        content: [{
+        content: {
           type: "text",
           text: `Created ticket: ${ticket.key} - ${ticket.self}`
-        }]
+        }
       };
     } catch (error) {
       console.error('Error creating ticket:', error);
