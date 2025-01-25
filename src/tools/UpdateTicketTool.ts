@@ -7,7 +7,9 @@ const UpdateTicketSchema = z.object({
   summary: z.string().optional(),
   description: z.string().optional(),
   assigneeId: z.string().optional(),
-  status: z.string().optional()
+  status: z.string().optional(),
+  dueDate: z.string().optional(),
+  priority: z.string().optional()
 });
 
 type UpdateTicketInput = z.infer<typeof UpdateTicketSchema>;
@@ -17,13 +19,15 @@ const updateJiraIssue = async (issueId: string, fields: any) => {
   return response;
 };
 
-const buildUpdateFields = ({ summary, description, assigneeId, status }: Omit<UpdateTicketInput, 'ticketId'>) => {
+const buildUpdateFields = ({ summary, description, assigneeId, status, dueDate, priority }: Omit<UpdateTicketInput, 'ticketId'>) => {
   const fields: any = {};
   
   if (summary) fields.summary = summary;
   if (description) fields.description = description;
   if (assigneeId) fields.assignee = { id: assigneeId };
   if (status) fields.status = { name: status };
+  if (dueDate) fields.duedate = dueDate;
+  if (priority) fields.priority = { name: priority };
 
   return fields;
 };
@@ -51,6 +55,14 @@ class UpdateTicketTool extends MCPTool<UpdateTicketInput> {
     status: {
       type: UpdateTicketSchema.shape.status,
       description: "New status for the ticket (e.g., 'In Progress', 'Done')"
+    },
+    dueDate: {
+      type: UpdateTicketSchema.shape.dueDate,
+      description: "Due date for the ticket in ISO format (e.g., '2025-01-30')"
+    },
+    priority: {
+      type: UpdateTicketSchema.shape.priority,
+      description: "Priority level of the ticket (e.g., 'Highest', 'High', 'Medium', 'Low', 'Lowest')"
     }
   };
 
