@@ -1,6 +1,6 @@
 # braindone-mcp
 
-A Model Context Protocol (MCP) server built with mcp-framework.
+A Model Context Protocol (MCP) server that provides Jira integration tools, built with mcp-framework.
 
 ## Quick Start
 
@@ -10,154 +10,100 @@ npm install
 
 # Build the project
 npm run build
-
 ```
-## LOCAL DEV MODE - ROO CLINE CONFIG
 
-Changes args to contain a string with the path to dist/index.js of this repo on your machine. make sure to `npm run build` beforehand
-```
+## Local Development Setup
+
+### ROO CLINE Configuration
+
+For local development with ROO CLINE, update the args to contain the path to dist/index.js of this repo on your machine. Make sure to `npm run build` beforehand:
+
+```json
 {
   "mcpServers": {
-
-    "braindone":
-     {"command": "node",
+    "braindone": {
+      "command": "node",
       "args":["/home/user/braindone-mcp/dist/index.js"]
-}
+    }
   }
 }
 ```
+
+### Claude Desktop Configuration
+
+Add this configuration to your Claude Desktop config file, updating the path to match your local setup:
+
+```json
+{
+  "mcpServers": {
+    "braindone": {
+      "command": "node",
+      "args": ["/path/to/your/braindone-mcp/dist/index.js"]
+    }
+  }
+}
+```
+
+Config file locations:
+- MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+
+## Available Tools
+
+This MCP server provides the following Jira integration tools:
+
+### Create Ticket Tool
+Creates new Jira tickets with customizable fields:
+- Ticket name/summary
+- Description
+- Assignee ID
+
+### Update Ticket Tool
+Updates existing Jira tickets with:
+- Summary
+- Description
+- Assignee
+- Status
+
+### Get All Tickets Tool
+Retrieves tickets from a specified Jira project with:
+- Summary
+- Status
+- Assignee
+- Description
+
+### Get All Users Tool
+Fetches Jira users with pagination support:
+- Configurable start index
+- Adjustable results per page
 
 ## Project Structure
 
 ```
-atlassian-mcp/
+braindone-mcp/
 ├── src/
-│   ├── tools/        # MCP Tools
-│   │   └── ExampleTool.ts
-│   └── index.ts      # Server entry point
+│   ├── tools/
+│   │   ├── CreateTicketTool.ts
+│   │   ├── UpdateTicketTool.ts
+│   │   ├── GetTicketsTool.ts
+│   │   └── GetAllUsers.ts
+│   ├── clients/
+│   │   └── jira.client.js
+│   └── index.ts
 ├── package.json
 └── tsconfig.json
 ```
 
-## Adding Components
-
-The project comes with an example tool in `src/tools/ExampleTool.ts`. You can add more tools using the CLI:
-
-```bash
-# Add a new tool
-mcp add tool my-tool
-
-# Example tools you might create:
-mcp add tool data-processor
-mcp add tool api-client
-mcp add tool file-handler
-```
-
-## Tool Development
-
-Example tool structure:
-
-```typescript
-import { MCPTool } from "mcp-framework";
-import { z } from "zod";
-
-interface MyToolInput {
-  message: string;
-}
-
-class MyTool extends MCPTool<MyToolInput> {
-  name = "my_tool";
-  description = "Describes what your tool does";
-
-  schema = {
-    message: {
-      type: z.string(),
-      description: "Description of this input parameter",
-    },
-  };
-
-  async execute(input: MyToolInput) {
-    // Your tool logic here
-    return `Processed: ${input.message}`;
-  }
-}
-
-export default MyTool;
-```
-
-## Publishing to npm
-
-1. Update your package.json:
-   - Ensure `name` is unique and follows npm naming conventions
-   - Set appropriate `version`
-   - Add `description`, `author`, `license`, etc.
-   - Check `bin` points to the correct entry file
-
-2. Build and test locally:
-   ```bash
-   npm run build
-   npm link
-   atlassian-mcp  # Test your CLI locally
-   ```
-
-3. Login to npm (create account if necessary):
-   ```bash
-   npm login
-   ```
-
-4. Publish your package:
-   ```bash
-   npm publish
-   ```
-
-After publishing, users can add it to their claude desktop client (read below) or run it with npx
-```
-
-## Using with Claude Desktop
-
-### Local Development
-
-Add this configuration to your Claude Desktop config file:
-
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "atlassian-mcp": {
-      "command": "node",
-      "args":["/absolute/path/to/atlassian-mcp/dist/index.js"]
-    }
-  }
-}
-```
-
-### After Publishing
-
-Add this configuration to your Claude Desktop config file:
-
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "atlassian-mcp": {
-      "command": "npx",
-      "args": ["atlassian-mcp"]
-    }
-  }
-}
-```
-
 ## Building and Testing
 
-1. Make changes to your tools
+1. Make your changes to the tools
 2. Run `npm run build` to compile
 3. The server will automatically load your tools on startup
 
-## Learn More
+## Configuration
 
-- [MCP Framework Github](https://github.com/QuantGeekDev/mcp-framework)
-- [MCP Framework Docs](https://mcp-framework.com)
+The Jira integration uses the following default settings:
+- Project Key: MFLP
+- Issue Type: Task
+
+These can be modified in the CreateTicketTool configuration.
